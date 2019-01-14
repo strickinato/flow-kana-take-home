@@ -1,0 +1,14 @@
+{
+  "name": "flow-kana-aaron-strick-take-home",
+  "version": "1.0.0",
+  "description": "This is the test to show the flow-kanians that I'm legit!",
+  "main": "app.js",
+  "scripts": {
+    "start": "parcel index.html"
+  },
+  "author": "Aaron Strick",
+  "license": "ISC",
+  "devDependencies": {
+    "parcel-bundler": "^1.11.0"
+  }
+}
