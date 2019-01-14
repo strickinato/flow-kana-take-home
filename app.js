@@ -171,11 +171,12 @@ class View {
     - Hands the model to the view
     - Then attaches the view to the page
 */
+
 window.addEventListener('load', function() {
     const inputForm = document.forms["input-form"];
     const outputDiv = document.getElementById("output");
 
-    inputForm.addEventListener('submit', (e) => {
+    inputForm.addEventListener('input', (e) => {
         // This is client side only so we don't actually need
         // to send anything
         e.preventDefault();
