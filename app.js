@@ -32,22 +32,59 @@ class Grid {
         return values;
     }
 
+    // Creates an array or arrays
+    // with the values all empty strings
     filledArrays(rows, columns) {
-        return new Array(rows).fill(0).map(() => { return new Array(columns).fill("") });
+        return new Array(rows).fill(0).map(() => {
+            return new Array(columns).fill("");
+        });
+    }
+
+    // Based on a size and an amount of values,
+    // this creates an array of how many values
+    // should go in each column.
+    generateChunks(numRows, numColumns, numValues) {
+        const totalSpaces = (numRows * numColumns);
+        const emptySpaces = totalSpaces - numValues;
+
+        const numFullColumns = numColumns - emptySpaces;
+
+        const fullRows = new Array(numFullColumns).fill(numRows);
+        const notFullRows = new Array(emptySpaces).fill(numRows - 1);
+
+        return fullRows.concat(notFullRows);
+    }
+
+    // Given a mapping of columns indeces to the amount of values
+    // that should go in that column, this breaks a collection
+    // into those chunks
+    chunkValues(chunkArray, values) {
+        const chunkedValues = [];
+
+        let counter = 0;
+        chunkArray.forEach((chunkSize) => {
+            chunkedValues.push(values.slice(counter, counter + chunkSize));
+            counter += chunkSize;
+        });
+
+        return chunkedValues;
     }
 
     transformToRows(dataArray, numColumns) {
         const numValues = dataArray.length;
         const numRows = Math.ceil(numValues / numColumns);
-        let table = this.filledArrays(numRows, numColumns);
-        console.log(table)
 
-        for (let i = 0; i < numValues; i++) {
-            let value = dataArray[i];
-            let row = Math.floor(i / numColumns);
-            let column = i % numColumns;
+        const chunks = this.generateChunks(numRows, numColumns, numValues);
+        const chunkedValues = this.chunkValues(chunks, dataArray);
 
-            table[row][column] = value;
+        const table = this.filledArrays(numRows, numColumns);
+
+        for (let col=0; col < chunks.length; col++) {
+            let currentChunk = chunkedValues[col];
+            for (let row=0; row < currentChunk.length; row++) {
+                let value = currentChunk[row];
+                table[row][col] = value;
+            }
         }
 
         return table;
@@ -96,7 +133,6 @@ class View {
 
     renderTable(grid, numColumns) {
         let table = document.createElement("table");
-        console.log(grid)
 
         // construct the headings
         let headingsRow = document.createElement("tr");
